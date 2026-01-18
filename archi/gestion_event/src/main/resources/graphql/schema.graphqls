@@ -1,0 +1,116 @@
+########################
+# ENUMS
+########################
+
+enum ReservationStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
+
+########################
+# TYPES
+########################
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: String!
+}
+
+type Event {
+  id: ID!
+  title: String!
+  description: String
+  dateTime: String!
+  location: String!
+  organizer: String!
+  participants: [String!]!
+  ticketLimit: Int!
+  availableTickets: Int!
+  ticketPrice: Float!
+}
+
+type Reservation {
+  id: ID!
+  user: User!
+  event: Event!
+  quantity: Int!
+  totalAmount: Float!
+  status: ReservationStatus!
+  createdAt: String!
+}
+
+type Payment {
+  id: ID!
+  reservation: Reservation!
+  amount: Float!
+  status: PaymentStatus!
+  createdAt: String!
+}
+
+type AdminStats {
+  eventsCount: Int!
+  ticketsSold: Int!
+  revenue: Float!
+}
+
+########################
+# INPUTS
+########################
+
+input EventInput {
+  title: String!
+  description: String
+  dateTime: String!
+  location: String!
+  organizer: String!
+  participants: [String!]!
+  ticketLimit: Int!
+  ticketPrice: Float!
+}
+
+########################
+# QUERIES
+########################
+
+type Query {
+
+  #  EVENTS
+  events: [Event!]!
+  eventById(id: ID!): Event
+  whoami: String!
+
+  #  RESERVATIONS
+  myReservations: [Reservation!]!
+
+  #  DISPONIBILITÉ
+  availableTickets(eventId: ID!): Int!
+
+  #  ADMIN
+  adminStats: AdminStats!
+}
+
+########################
+# MUTATIONS
+########################
+
+type Mutation {
+
+  #  EVENTS (ADMIN)
+  createEvent(input: EventInput!): Event!
+  updateEvent(id: ID!, input: EventInput!): Event!
+  deleteEvent(id: ID!): Boolean!
+
+  #  RESERVATION (USER)
+  createReservation(eventId: ID!, quantity: Int!): Reservation!
+
+  #  PAYMENT (USER)
+  payReservation(reservationId: ID!, simulateSuccess: Boolean!): Payment!
+}

@@ -1,0 +1,9 @@
+target
+.idea
+.mvn/wrapper/maven-wrapper.jar
+frontend/node_modules
+frontend/dist
+frontend/.vite
+frontend/.cache
+frontend/.idea
+frontend/coverage
